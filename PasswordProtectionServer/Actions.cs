@@ -24,7 +24,7 @@ namespace PasswordProtectionServer
             return string.Empty;
         }
 
-        public static void PWChange(string Username, string PasswordOld, string PasswordNew)
+        public static bool PWChange(string Username, string PasswordOld, string PasswordNew)
         {
             if (DbAction.IsUsernameInDatabase(Username))
             {
@@ -32,8 +32,11 @@ namespace PasswordProtectionServer
                 {
                     DbAction.ChangePassword(Username, Crypto.Encrypt(PasswordOld, Username));
                     Email(Username, "Password Changed to: " + PasswordNew);
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public static void PWRecovery(string Username)
