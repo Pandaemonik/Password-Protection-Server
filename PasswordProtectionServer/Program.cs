@@ -103,10 +103,5 @@ namespace PasswordProtectionServer
 
             return messageData.ToString();
         }
-
-        public static int Main(string[] args)
-        {
-
-        }
     }
 }
