@@ -11,7 +11,7 @@ namespace PasswordProtectionServer
 
         // This constant is used to determine the keysize of the encryption algorithm in bits.
         // We divide this by 8 within the code below to get the equivalent number of bytes.
-        private const int Keysize = 256, _SaltSize = 16, _HashSize = 34, _HashIter = 5000;
+        private const int Keysize = 256, _SaltSize = 256, _HashSize = 256, _HashIter = 5000;
 
         // This constant determines the number of iterations for the password bytes generation function.
         private const int DerivationIterations = 1000;

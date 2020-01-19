@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Configuration;
+using System;
 
 namespace PasswordProtectionServer
 {
@@ -13,7 +14,7 @@ namespace PasswordProtectionServer
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 var query = "" +
-                    "INSERT INTO [dbo].[LogIn] (username,password) " +
+                    "INSERT INTO [dbo].[Table] (username,password) " +
                     "VALUES (@username,@password)";
 
                 using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter())
@@ -30,8 +31,9 @@ namespace PasswordProtectionServer
                         sqlDataAdapter.InsertCommand.Transaction.Commit();
                         connection.Close();
                     }
-                    catch (SqlException)
+                    catch (SqlException e)
                     {
+                        DisplayError("AddNewUser", e.Message);
                         result = -1;
                     }
                     sqlDataAdapter.InsertCommand.Dispose();
@@ -47,7 +49,7 @@ namespace PasswordProtectionServer
             {
                 var query = "" +
                     "SELECT password " +
-                    "FROM [dbo].[LogIn] " +
+                    "FROM [dbo].[Table] " +
                     "WHERE username = @username";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -73,7 +75,7 @@ namespace PasswordProtectionServer
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 var query = "" +
-                "UPDATE [dbo].[LogIn] " +
+                "UPDATE [dbo].[Table] " +
                 "SET password = @password " +
                 "WHERE username = @username";
                 using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter())
@@ -106,7 +108,7 @@ namespace PasswordProtectionServer
             {
                 var query = "" +
                     "SELECT username " +
-                    "FROM [dbo].[LogIn] " +
+                    "FROM [dbo].[Table] " +
                     "WHERE username = @username";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -124,5 +126,12 @@ namespace PasswordProtectionServer
                 }
             }
         }
+
+        public static void DisplayError(string Funcrion, string Message)
+        {
+
+            Console.WriteLine("Sql Error From: {0}\n Error Messege: {1}\n\n", Funcrion, Message);
+        }
     }
 }
+

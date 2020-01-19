@@ -28,9 +28,9 @@ namespace PasswordProtectionServer
         {
             if (DbAction.IsUsernameInDatabase(Username))
             {
-                if (Crypto.Encrypt(PasswordOld, Username) == Crypto.Decrypt(DbAction.GetPasswordByUser(Username), Username))
+                if (PasswordOld == Crypto.Decrypt(DbAction.GetPasswordByUser(Username), Username))
                 {
-                    DbAction.ChangePassword(Username, Crypto.Encrypt(PasswordOld, Username));
+                    DbAction.ChangePassword(Username, Crypto.Encrypt(PasswordNew, Username));
                     Email(Username, "Password Changed to: " + PasswordNew);
                     return true;
                 }
@@ -67,20 +67,25 @@ namespace PasswordProtectionServer
             {
                 MailMessage message = new MailMessage();
                 SmtpClient smtp = new SmtpClient();
-                message.From = new MailAddress("FromMailAddress");//Removed Actual Email for safety reasons
+                message.From = new MailAddress("Diplomna.rabotaprashtane@gmail.com");//Removed Actual Email for safety reasons
                 message.To.Add(new MailAddress(Email));
-                message.Subject = "Test";
+                message.Subject = "Password Reset";
                 message.IsBodyHtml = true; //to make message body as html  
                 message.Body = password;
+
                 smtp.Port = 587;
                 smtp.Host = "smtp.gmail.com"; //for gmail host  
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("FromMailAddress", "password");//Removed Actual Email for safety reasons
+                smtp.Credentials = new NetworkCredential("Diplomna.rabotaprashtane@gmail.com", "diplomna_parola");//Removed Actual Email for safety reasons
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(message);
             }
-            catch (Exception) { }
+            catch (Exception e)
+            {
+                var message = e.Message;
+                Console.Write("Email Error: {0}\n", message);
+            }
         }
     }
 }
